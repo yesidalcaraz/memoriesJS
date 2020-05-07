@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style type="text/css">
+        #marco1990 {
+          width: 400px;
+          height: 100%;
+          background-color: #41cef8;
+          margin: 20px auto;
+          padding: 10px;
+          line-height: 57px;
+        }
+        #coincidencias {
+          text-align: center;
+          font-size: 3rem;
+          background-color: red;
+          color: white;
+          width: 3rem;
+          margin: 20px auto;
+        }
+        #uno{
+          text-align: center;
+          font-size: 1rem;
+          color: red;
+        }
+          #dos{
+          text-align: center;
+          font-size: 1rem;
+          color: blue;
+        }
+      </style>    
+<script>
+   var srt1="",srt2="";
+   var nimagenes=8; 
+   var inicial=new Array(nimagenes*2);
+   inicial.fill("X");
+   var turno=true;
+   /***********************************************************************/
+   function cambio(ori){
+
+    if (ori.src.indexOf("fondo.png")==-1) return;
+
+       var n=ori.id.indexOf("_");
+       var numero=ori.id.substring(n+1);
+
+       ori.src="imagenes/"+inicial[numero]+".png";
+
+     if (turno){
+      srt1=ori;
+     }else{
+      srt2=ori;
+      comprobar();
+     }
+    
+    turno =!turno;
+   }
+   /***********************************************************************/
+   function comprobar(){
+       var n1=srt1.id.indexOf("_");
+       var m1=srt1.id.substring(n1+1);
+      
+       var n2=srt2.id.indexOf("_");
+       var m2=srt2.id.substring(n2+1);
+
+    if (inicial[m1]==inicial[m2]){
+         document.getElementById("coincidencias").innerHTML=
+         parseInt(document.getElementById("coincidencias").innerHTML)+1;
+         
+    }else{
+        setTimeout(()=>{
+            srt1.src="imagenes/fondo.png";
+             srt2.src="imagenes/fondo.png";
+        },750);
+
+    }   
+
+
+   }
+   /***********************************************************************/
+     function poner() {
+        var destino = document.getElementById("marco1990");
+        for (var i = 0; i < inicial.length; i++)
+         ponimagen(destino, i);
+      }
+	/***********************************************************************/
+      function ponimagen(des, id) {
+	   var elem = document.createElement("img");
+        elem.setAttribute("src", "imagenes/fondo.png");
+        elem.setAttribute("height", "136");
+        elem.setAttribute("width", "100");
+        elem.setAttribute("id", "imagen_"+id);
+        des.appendChild(elem);
+        var ori = document.getElementById("imagen_"+id);
+        ori.addEventListener("dblclick", ()=>{ cambio(ori);});
+      }
+   /******************************************************/
+   function inicio(){
+       var k;
+       for(var i=1;i<=nimagenes;i++){
+          for(var j=1;j<=2;j++){
+            /****************************************/  
+            while(true){
+              k=alea(1,nimagenes*2)-1;
+              if(inicial[k]=="X"){
+                inicial[k]="picas_"+i;
+                break;
+              }
+            }  
+            /****************************************/  
+          }    
+       }
+   }
+   /******************************************************/
+   function alea(li, ls) {
+        return Math.floor(Math.random() * (ls - li + 1)) + li;
+   }
+   /******************************************************/
+   
+</script>    
+</head>
+<body onload="inicio();poner();">
+          <h2 id="uno">HAZ DOBLE CLICK</h2> <h2 id="dos">Y REVELA CARTAS PARA HACER PAREJAS! </h2>
+        <div id="marco1990"></div>
+        <p id="coincidencias">0</p>
+
+</body>
+</html>

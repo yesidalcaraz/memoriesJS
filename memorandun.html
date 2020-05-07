@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style type="text/css">
+        #marco1990 {
+          width: 400px;
+          height: 100%;
+          background-color: #41cef8;
+          margin: 20px auto;
+          padding: 10px;
+          line-height: 57px;
+        }
+        #coincidencias {
+          text-align: center;
+          font-size: 3rem;
+          background-color: red;
+          color: white;
+          width: 3rem;
+          margin: 20px auto;
+        }
+      </style>    
+<script>
+   var srt1="",srt2="";
+   var nimagenes=8; 
+   var inicial=new Array(nimagenes*2);
+   inicial.fill("X");
+   var turno=true;
+   /***********************************************************************/
+   function cambio(ori){
+
+    if (ori.src.indexOf("fondo.jpg")==-1) return;
+
+       var n=ori.id.indexOf("#");
+       var imagen=ori.id.substring(0,n);
+       var numero=ori.id.substring(n+1);
+
+       ori.src="imagenes/"+imagen+".jpg";
+
+     if (turno){
+      srt1=ori;
+     }else{
+      srt2=ori;
+      comprobar();
+     }
+    
+    turno =!turno;
+   }
+   /***********************************************************************/
+   function comprobar(){
+       var n1=srt1.id.indexOf("#");
+       var imagen1=srt1.id.substring(0,n1);
+      
+       var n2=srt2.id.indexOf("#");
+       var imagen2=srt2.id.substring(0,n2);
+
+    if (imagen1==imagen2){
+         document.getElementById("coincidencias").innerHTML=
+         parseInt(document.getElementById("coincidencias").innerHTML)+1;
+    }else{
+        setTimeout(()=>{
+            srt1.src="imagenes/fondo.jpg";
+             srt2.src="imagenes/fondo.jpg";
+        },750);
+
+    }   
+
+
+   }
+   /***********************************************************************/
+     function poner() {
+        var destino = document.getElementById("marco1990");
+        for (var i = 0; i < inicial.length; i++)
+         ponimagen(destino, inicial[i]);
+      }
+	/***********************************************************************/
+      function ponimagen(des, id) {
+	   var elem = document.createElement("img");
+        elem.setAttribute("src", "imagenes/fondo.jpg");
+        elem.setAttribute("height", "100");
+        elem.setAttribute("width", "100");
+        elem.setAttribute("id", id);
+        des.appendChild(elem);
+        var ori = document.getElementById(id);
+        ori.addEventListener("dblclick", ()=>{ cambio(ori);});
+      }
+   /******************************************************/
+   function inicio(){
+       var k;
+       for(var i=1;i<=nimagenes;i++){
+          for(var j=1;j<=2;j++){
+            /****************************************/  
+            while(true){
+              k=alea(1,nimagenes*2)-1;
+              if(inicial[k]=="X"){
+                inicial[k]="circulo_"+i+"#"+j;
+                break;
+              }
+            }  
+            /****************************************/  
+          }    
+       }
+   }
+   /******************************************************/
+   function alea(li, ls) {
+        return Math.floor(Math.random() * (ls - li + 1)) + li;
+   }
+   /******************************************************/
+   
+</script>    
+</head>
+<body onload="inicio();poner();">
+
+        <div id="marco1990"></div>
+        <p id="coincidencias">0</p>
+
+</body>
+</html>
